@@ -5,7 +5,9 @@
       "methods": [
         "get"
       ],
-      "redirect": "/"
+      "rewrite": "/index.html",
+      "redirect": "/index.html",
+      "statusCode": 200
     }
   ]
 }
