@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "react-scripts build",
+    "build": "",
     "build:azure": "npm run build"
   }
 }
