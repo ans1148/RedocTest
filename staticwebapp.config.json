@@ -5,7 +5,7 @@
       "methods": [
         "get"
       ],
-      "redirect": "/hsc_mes.html",
+      "rewrite": "/hsc_mes.html",
       "statusCode": 200
     }
   ]
