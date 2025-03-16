@@ -1,0 +1,182 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: '[KPMG] Dynamics365 OpenAPI Document Sample'
+  description: KPMG의 Dynamics365 OpenAPI 표준 문서 가이드를 위한 문서입니다.
+  contact:
+    email: donggyun6216@gmail.com
+paths: 
+  # POST Sample
+  /KPC_ServiceGroup/KPC_Service/createItem:
+    post:
+      tags:
+        - Create Item API
+      summary: 아이템 정보 생성 
+      operationId: KPC_MES_InventTableCreate
+      description: 아이템 Master 정보를 생성하는 API Sample 입니다.
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventTable'
+  /data/Customers:
+    get:
+      tags:
+        - Get Customer API
+      summary: 고객 정보 마스터
+      operationId: KPC_MES_CustTableGet
+      description: 고객정보를 가져가는 API Sample입니다.
+      parameters:
+        - name: $filter
+          in: query
+          description: "필터 조건을 적용하여 데이터 검색 (예: StringField eq 'retail')"
+          schema:
+            type: string
+        - name: $select
+          in: query
+          description: "반환할 필드 지정 (예: name, age)"
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+servers:
+  - description: API의 Base URL 환경 정보. EndPoint가 될 URL을 입력
+    url: https://usnconeboxax1aos.cloud.onebox.dynamics.com
+components:
+  # Azure API Management JWT 인증 토큰을 활용할 경우 다음과 같은 설정을 사용하면 됩니다.
+  securitySchemes: 
+    apiKeyHeader: 
+      type: 'apiKey'
+      name: 'Authorization'
+      in: 'header'
+  responses:
+    # 200 응답에 대한 Sample입니다
+    '200':
+      description: API 정상작동 시 응답 예시
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SuccessSchema'
+    # 기타 Error들에 대한 Sample입니다
+    '400':
+      description: Schema Error 발생 시 응답 예시
+    '401':
+      description: 인증키 오류발생 시 응답 예시
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthErrorSchema'
+    '500':
+      description: 기타 오류. An exceiption occured when invoking the operation 이후 메세지 참고.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+  schemas:
+    SuccessSchema:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Success
+          example: "Success"
+    ErrorSchema:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: 오류 메세지
+          example: "An exceiption occured when invoking the operation - Parameter is Wrong"
+        ExceptionType:
+          type: string
+          description: 오류 유형
+          example: ErrorException
+        ActivityId:
+          type: string
+          description: System 호출 Key (Guid 형식, IfKey와는 무관한 System 자체 고유 Key)
+          example: "3bf94892-0006-d66c-f93be9c4d901"
+    AuthErrorSchema:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: 오류 메세지
+          example: "Authentication failed."
+        StackTrace:
+          type: string
+          example: null
+        ExceptionType:
+          type: string
+          description: 오류 유형
+          example: "System.InvalidOperationException"
+    InventTable:
+      type: object
+      required:
+        - ItemId
+        - DataAreaId
+        - ProductType
+        - Symbol
+      properties:
+        requestJSON:
+          type: object
+          properties:
+            ItemId:
+              type: string
+              description: 제품코드, 도번코드
+              example: 10-23131-001-R01
+            DataAreaId:
+              type: string
+              description: 법인코드
+              example: KPMG
+            ProductName:
+              type: string
+              description: 제품명
+              example: STOCKER FRAME BODY ASSY
+            SearchName:
+              type: string
+              description: ProductName이 없으면, ProductName을 자동으로 입력예정. 단 String Size 잘림 주의
+              example: Stocker frame body assy
+            ProductType:
+              type: string
+              description: Item 유형
+              default: Item
+              example: Item
+              enum:
+                - Item
+                - Service
+            ABCValue:
+              type: string
+              description: ABC 유형
+              default: None
+              example: A
+              enum:
+                - None
+                - A
+                - B
+                - C
+            Symbol:
+              type: string
+              description: 단위
+              example: EA
+            ProductDescription:
+              type: string
+              description: 제품 설명
+              example: 제품 설명을 입력하십시오
+security:
+  - apiKeyHeader: []
