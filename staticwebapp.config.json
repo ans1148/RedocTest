@@ -1,10 +1,11 @@
 {
   "routes": [
     {
-      "route": "/",
+      "route": "/hsc_mes",
       "methods": [
         "get"
       ],
+      "redirect": "/hsc_mes.html",
       "statusCode": 200
     }
   ]
